@@ -51,6 +51,8 @@ export function calendarGrid(when=Date.now(),{mode='phase'}={}) {
  checkMode(mode);
  const current=mapInstant(when,{mode});
  const cycleId=current.cycleId,endMs=Date.parse(current.nextFullMoon);
+ const actualToday=mapInstant(Date.now(),{mode});
+ const todayDay=actualToday.cycleId===cycleId?actualToday.day:null;
  const edges=[];
  for(let i=1;i<=28;i++)edges.push(fromLunar({cycleId,day:i,mode}).getTime());
  edges.push(endMs);
@@ -59,7 +61,7 @@ export function calendarGrid(when=Date.now(),{mode='phase'}={}) {
   const days=[];
   for(let dayOfWeek=1;dayOfWeek<=7;dayOfWeek++){
    const day=(week-1)*7+dayOfWeek;
-   days.push({cycleId,day,week,dayOfWeek,startUTC:new Date(edges[day-1]).toISOString(),endExclusiveUTC:new Date(edges[day]).toISOString(),midpointUTC:new Date((edges[day-1]+edges[day])/2).toISOString(),durationSISeconds:(edges[day]-edges[day-1])/1000,isToday:day===current.day});
+   days.push({cycleId,day,week,dayOfWeek,startUTC:new Date(edges[day-1]).toISOString(),endExclusiveUTC:new Date(edges[day]).toISOString(),midpointUTC:new Date((edges[day-1]+edges[day])/2).toISOString(),durationSISeconds:(edges[day]-edges[day-1])/1000,isToday:day===todayDay});
   }
   weeks.push({week,days});
  }

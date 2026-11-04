@@ -83,3 +83,10 @@ test('supported locale formatting and fallbacks work',()=>{
  }
  assert.ok(format(t,{locale:'invalid_locale_name'}).length>10);
 });
+
+test('today highlight follows the real current cycle, not the browsed cycle',()=>{
+ const present=calendarGrid(Date.now(),{mode:'linear'});
+ assert.equal(present.days.filter(day=>day.isToday).length,1);
+ const past=calendarGrid('2020-01-01T00:00:00Z',{mode:'linear'});
+ assert.equal(past.days.filter(day=>day.isToday).length,0);
+});
