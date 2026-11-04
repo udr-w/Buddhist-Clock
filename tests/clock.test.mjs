@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DAYS_PER_MONTH,WEEKS_PER_MONTH,SECONDS_PER_MONTH,fullMoonInterval,mapInstant,lunarToUTC,eraLabel,moonAt,angularSeparation} from '../src/clock.mjs';
+const t=Date.parse('2026-11-05T00:00:00Z');
+test('four seven-day weeks fit exactly in the 28-day month',()=>{assert.equal(DAYS_PER_MONTH,28);assert.equal(WEEKS_PER_MONTH,4);assert.equal(SECONDS_PER_MONTH,28*86400);});
+test('full moons approximate independent USNO UTC dates',()=>{const {startMs,endMs}=fullMoonInterval(t);assert.ok(Math.abs(startMs-Date.parse('2026-10-26T04:12:00Z'))<5*60000);assert.ok(Math.abs(endMs-Date.parse('2026-11-24T14:53:00Z'))<5*60000);});
+test('all 28 days occur, grouped in four exact lunar weeks',()=>{const {startMs,endMs}=fullMoonInterval(t);for(let d=0;d<28;d++){const c=mapInstant(startMs+(endMs-startMs)*(d+.4)/28,{mode:'linear'});assert.equal(c.day,d+1);assert.equal(c.week,Math.floor(d/7)+1);assert.equal(c.dayOfWeek,d%7+1);}});
+test('phase and linear modes differ inside a month',()=>{const a=mapInstant(t,{mode:'phase'}),b=mapInstant(t,{mode:'linear'});assert.notEqual(a.progress,b.progress);assert.ok(a.siSecondsPerVirtualSecond>.9&&a.siSecondsPerVirtualSecond<1.3);});
+test('observer changes sky, not global time coordinate',()=>{const a=mapInstant(t,{observer:{latitude:6.9271,longitude:79.8612}}),b=mapInstant(t,{observer:{latitude:51.5,longitude:-.12}});assert.equal(a.secondOfCycle,b.secondOfCycle);assert.ok(Math.abs(a.sky.azimuthDeg-b.sky.azimuthDeg)>1);});
+test('reverse conversion round trips both mappings',()=>{for(const mode of ['linear','phase']){const c=mapInstant(t,{mode});const real=lunarToUTC({cycleStart:c.cycleId,secondOfCycle:c.secondOfCycle,mode});assert.ok(Math.abs(real.getTime()-t)<2000);}});
+test('2026 era transition known, other years provisional',()=>{assert.equal(eraLabel('2026-05-29T18:29:59Z').year,2569);assert.equal(eraLabel('2026-05-29T18:30:00Z').year,2570);assert.equal(eraLabel('2027-11-05T00:00:00Z').verified,false);});
+test('horizon calculation and observation angular distance',()=>{const sky=moonAt(t,6.9271,79.8612);assert.ok(sky.azimuthDeg>=0&&sky.azimuthDeg<360);assert.ok(Math.abs(sky.apparentAltitudeDeg)<=90);assert.ok(Math.abs(angularSeparation(90,0,0,0)-90)<1e-5);});
+test('invalid inputs rejected',()=>{assert.throws(()=>mapInstant(t,{mode:'bogus'}),RangeError);assert.throws(()=>moonAt(t,91,0),RangeError);assert.throws(()=>angularSeparation(0,100,0,0),RangeError);assert.throws(()=>lunarToUTC({cycleStart:t,secondOfCycle:SECONDS_PER_MONTH}),RangeError);});
