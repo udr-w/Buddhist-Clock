@@ -70,5 +70,5 @@ test('tabs remain keyboard navigable, no motion required for reduced-motion user
   await page.locator('#swipeSurface').focus();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('[data-mode="utc"]')).toHaveAttribute('aria-selected','true');
-  await expect(page.locator('#flipRotor')).toHaveCSS('transform','matrix(1, 0, 0, 1, 0, 0)');
+  expect(await page.locator('#flipRotor').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).isIdentity)).toBe(true);
 });
