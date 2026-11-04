@@ -1,4 +1,4 @@
-import Astronomy from 'astronomy-engine';
+import * as Astronomy from 'astronomy-engine';
 export const DAYS_PER_MONTH=28, DAYS_PER_WEEK=7, WEEKS_PER_MONTH=4;
 export const SECONDS_PER_MONTH=28*86400;
 const mod=(a,n)=>((a%n)+n)%n;
