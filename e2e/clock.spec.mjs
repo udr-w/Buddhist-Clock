@@ -46,7 +46,7 @@ test('swipe left and right on clock to flip through all three modes',async({page
   await expect(page.locator('#time')).toHaveText(/^\d\d:\d\d:\d\d$/);
   await swipe('right');
   await expect(page.locator('[data-mode="linear"]')).toHaveAttribute('aria-selected','true');
-  await face.screenshot({path:'test-results/'+test.info().project.name+'-clock.png'});
+  await face.screenshot({path:test.info().outputPath('clock.png')});
 });
 
 test('UTC face shows UTC time, not browser local time, and page never overflows horizontally',async({page})=>{
