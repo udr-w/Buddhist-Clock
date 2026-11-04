@@ -22,21 +22,31 @@
 </section>
 <section class="instrument" id="clock">
 <div class="sectiontop"><div><div class="eyebrow">01 / THE INSTRUMENT</div><h2>Twenty-eight days. One lunar cycle.</h2></div>
-<div class="switch" role="group" aria-label="Lunar time mapping method"><button type="button" data-mode="phase" aria-pressed="true" class="on">Phase-tracking</button><button type="button" data-mode="linear" aria-pressed="false">Evenly stretched</button></div></div>
+<div class="switch" role="tablist" aria-label="Clock face">
+<button type="button" data-mode="phase" role="tab" aria-selected="true" aria-controls="dialStage" class="on">Phase-tracking</button>
+<button type="button" data-mode="linear" role="tab" aria-selected="false" aria-controls="dialStage">Evenly stretched</button>
+<button type="button" data-mode="utc" role="tab" aria-selected="false" aria-controls="dialStage">UTC</button>
+</div></div>
 <div class="clockgrid">
-<div class="dialwrap"><svg viewBox="0 0 500 500" role="img" aria-label="Circular twenty-eight day lunar clock">
-<defs><linearGradient id="beam"><stop stop-color="#ffe8b4"/><stop offset="1" stop-color="#b99757"/></linearGradient></defs>
-<circle cx="250" cy="250" r="228" stroke="#34445a" stroke-width="1" fill="none"/>
-<circle cx="250" cy="250" r="178" stroke="#253648" stroke-width="7" fill="none"/>
-<circle id="arc" cx="250" cy="250" r="178" stroke="url(#beam)" stroke-width="7" fill="none" transform="rotate(-90 250 250)" stroke-linecap="round"/>
-<g id="ticks"></g><g id="hand"><line x1="250" y1="250" x2="250" y2="96" stroke="#f2d8a4" stroke-width="2"/><circle cx="250" cy="96" r="6" fill="#f2d8a4"/></g>
-<circle cx="250" cy="250" r="136" fill="#0b1625" stroke="#394b61" stroke-width="1.3"/><circle cx="250" cy="250" r="4" fill="#f2d8a4"/>
-</svg><div class="dialmiddle"><div class="subtle">LUNAR DAY</div><div class="daynum"><span id="day">··</span><small>/ 28</small></div><div class="digits" id="time">--:--:--</div><div class="subtle">VIRTUAL HOURS : MINUTES : SECONDS</div></div></div>
+<div class="dial-stage" id="dialStage" aria-label="Interactive clock">
+  <p class="swipe-hint" id="swipeHint"><span aria-hidden="true">←</span> Swipe dial to change clock <span aria-hidden="true">→</span></p>
+  <div class="dial-interaction" id="swipeSurface" tabindex="0" role="group" aria-label="Swipe left or right, or press the arrow keys, to switch clock faces">
+    <div class="flip-rotor" id="flipRotor">
+      <div class="flip-face" id="faceFront"></div>
+      <div class="flip-face flip-face-back" id="faceBack" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div class="digital-strip" aria-live="off">
+    <div class="digital-day"><span id="dayLabel">LUNAR DAY</span><strong id="day">··</strong><small id="daySuffix">/ 28</small></div>
+    <div class="digital-time"><span id="faceLabel">PHASE-TRACKING TIME</span><strong id="time">--:--:--</strong></div>
+  </div>
+  <p class="hand-legend">Ornate hour and minute hands · gold seconds hand · outer lunar-day progress</p>
+</div>
 <div class="readout"><div class="eyebrow">LIVE / ASTRONOMICAL TIME</div><div class="era" id="era">BE ····</div><div class="week" id="week">WEEK · OF 4</div>
 <p id="modehelp">Phase-tracking seconds expand and contract with the Moon–Sun angle.</p>
 <div class="line"><span>Last full moon</span><b id="from">···</b></div>
 <div class="line"><span>Next full moon</span><b id="until">···</b></div>
-<div class="line"><span>Length of this lunar second</span><b id="sec">···</b></div>
+<div class="line"><span id="secondLabel">Length of this lunar second</span><b id="sec">···</b></div>
 <div class="line"><span>Moon illumination</span><b id="lit">···</b></div>
 <div class="line"><span>Underlying UTC</span><b id="utc">···</b></div>
 <div class="status" id="status" role="status">Initializing…</div>

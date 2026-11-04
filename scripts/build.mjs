@@ -9,7 +9,7 @@ for(const [source,name] of [
 ]){
  await build({entryPoints:[source],bundle:true,platform:'browser',format:'esm',target:'es2022',minify:true,outfile:join('site',name)});
 }
-for(const filename of ['index.html','style.css','app.mjs','favicon.svg']){
+for(const filename of ['index.html','style.css','app.mjs','wall-clock.mjs','favicon.svg']){
  await copyFile(join('web',filename),join('site',filename));
 }
 await cp('web/demo', 'site/demo', {recursive:true});

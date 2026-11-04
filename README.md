@@ -15,6 +15,12 @@ Node.js 20+:
 4. python -m http.server 8000 --directory site
 5. Open http://localhost:8000
 
+## Analog wall clock interface
+
+The homepage includes three clock faces: lunar phase-tracking, lunar evenly stretched, and conventional UTC. Both lunar modes reuse `mapInstant` from the existing astronomy engine. All faces display three independently rotating ornamental hands (hour, minute, second) plus numeric time. On phones, swipe left/right across the dial to flip; the three accessible tabs and keyboard arrow controls are also supported. The outer 28-day ring on lunar faces is separate from the conventional 12-hour inner dial. The UTC face uses true UTC fields, not device-local time.
+
+The analog component in `web/wall-clock.mjs` exports pure `handAngles`, `faceModel`, `nextClockMode` and SVG presentation helpers for other clients, with unit and browser tests. Reduced-motion settings disable the 3D flip without disabling navigation.
+
 ## Interactive SDK example
 
 [**Lunar Planner demo**](https://udr-w.github.io/Buddhist-Clock/demo/) · [Source](web/demo/)
