@@ -16,3 +16,10 @@ Invariants: 1 ≤ day ≤ 28, 1 ≤ week ≤ 4, 1 ≤ weekday ≤ 7; UTC must re
 Limitations: Device time synchronization, observer elevation, atmospheric refraction, and lunar-model differences matter to astronomical accuracy. The official Buddhist lunisolar calendar and Sri Lankan Poya dates are intentionally not reimplemented. Only 2026 Buddhist Era transition is curated; other years are provisional.
 
 Non-goals: free CPU cycles from virtual time, physical time dilation measurement, replacement of OS timers, cryptocurrency clock, payment-processing clocks, precise certified astronomical observations.
+
+
+## Calendar SDK facade
+
+`src/calendar.mjs` adds normal operations (now, startOf, endOf, add/subtract, compare, difference, format), a **four-week calendarGrid**, `fromLunar` conversion, and aggregation of real UTC records with `report`. Date picker and reporting components consume the framework-neutral grid rather than changing operating-system calendars. The `cycleId` is an ISO instant identifying a lunation; no unsupported sequential Buddhist month numbering is invented. Calendar year arithmetic is intentionally absent until a reliable year/month model is defined.
+
+For public UI, `web/demo/` offers a native semantic 28-button calendar and lunar time fields. The astronomy engine is bundled into two browser ESM outputs, `site/buddhist-clock.mjs` and `site/buddhist-calendar.mjs`.

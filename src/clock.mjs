@@ -21,7 +21,7 @@ export function fullMoonInterval(when=Date.now()){
 }
 export function eraLabel(when=Date.now()){
  const t=toMs(when),y=new Date(t+19800000).getUTCFullYear();
- if(y===2026)return {year:t>=Date.parse('2026-05-29T18:30:00Z')?2570:2569,verified:true,basis:'Sri Lanka State Vesak 2026 convention'};
+ if(y===2026)return {year:t>=Date.parse('2026-05-29T18:30:00Z')?2570:2569,verified:true,boundaryVerified:false,basis:'BE 2570 confirmed for the May 30, 2026 State Vesak observance; May 30 midnight is a project convention, not a verified religious new-year instant. The gazetted Vesak public holiday remains May 1.'};
  return {year:y+543,verified:false,basis:'CE + 543 provisional: other Vesak transitions not curated'};
 }
 export function moonAt(when,latitude,longitude,elevationMeters=0){

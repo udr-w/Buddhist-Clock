@@ -1,7 +1,7 @@
 import {
  now, fromLunar, calendarGrid, report, formatUTC, add,
  labelsFor, SUPPORTED_UI_LOCALES
-} from '../../buddhist-calendar.mjs';
+} from '../buddhist-calendar.mjs';
 const $=id=>document.getElementById(id);
 const initial=Date.now();
 let viewInstant=initial, mode='phase', locale='en', selectedDay=1, sequence=1;
