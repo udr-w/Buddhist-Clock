@@ -1,7 +1,16 @@
 import { build } from 'esbuild';
-import { mkdir, copyFile } from 'node:fs/promises';
+import { mkdir, copyFile, cp } from 'node:fs/promises';
 import { join } from 'node:path';
+
 await mkdir('site', {recursive:true});
-await build({entryPoints:['src/clock.mjs'],bundle:true,platform:'browser',format:'esm',target:'es2022',minify:true,outfile:join('site','buddhist-clock.mjs')});
-for(const filename of ['index.html','style.css','app.mjs','favicon.svg'])await copyFile(join('web',filename),join('site',filename));
-console.log('Built portable static site in site/');
+for(const [source,name] of [
+ ['src/clock.mjs','buddhist-clock.mjs'],
+ ['src/calendar.mjs','buddhist-calendar.mjs']
+]){
+ await build({entryPoints:[source],bundle:true,platform:'browser',format:'esm',target:'es2022',minify:true,outfile:join('site',name)});
+}
+for(const filename of ['index.html','style.css','app.mjs','favicon.svg']){
+ await copyFile(join('web',filename),join('site',filename));
+}
+await cp('web/demo', 'site/demo', {recursive:true});
+console.log('Built static website, portable SDK and example at site/demo/');

@@ -15,6 +15,23 @@ Node.js 20+:
 4. python -m http.server 8000 --directory site
 5. Open http://localhost:8000
 
+## Interactive SDK example
+
+[**Lunar Planner demo**](https://udr-w.github.io/Buddhist-Clock/demo/) · [Source](web/demo/)
+
+A complete minimal browser application that uses the same clock SDK for a **28-day calendar, lunar date/time picker, event data in canonical UTC, downloadable CSV reports, virtual-time arithmetic, and eight sample UI locales** (English, Sinhala, Tamil, Hindi, Spanish, French, Arabic, Chinese). Native language support for the surrounding explanatory copy is still incomplete; the SDK provides reusable Intl number/date formatting and translatable core calendar terms.
+
+Try:
+1. Pick a lunar day in the four-week calendar.
+2. Set lunar time (hour, minute, second), enter an event title, and add it.
+3. Watch the real UTC instant and lunar weekly report.
+4. Switch Phase ↔ Linear to see the exact same UTC events grouped differently.
+5. Move between lunations, choose a language, download a report.
+
+**Build:** npm run build and serve site/; the demo lives in `site/demo/`.
+
+See [SDK integration guide](docs/SDK.md), [component library investigation](docs/COMPONENTS.md), and [2026 Vesak source notes](docs/VESAK_2026.md).
+
 ## API
 
 Import from src/clock.mjs (Node), or site/buddhist-clock.mjs (built browser bundle).
@@ -30,6 +47,11 @@ Import from src/clock.mjs (Node), or site/buddhist-clock.mjs (built browser bund
 Available modes:
 - phase: lunar seconds change duration as geocentric Moon–Sun longitude separation progresses.
 - linear: equal-length virtual days within each full-moon interval; their SI length changes between cycles.
+
+Calendar facade exported from `src/calendar.mjs` or `site/buddhist-calendar.mjs`:
+`now`, `toLunar`, `fromLunar`, `calendarGrid`, `startOf`, `endOf`, `add`, `subtract`, `compare`, `difference`, `format`, `report`, `formatUTC`, `labelsFor`, and `SUPPORTED_UI_LOCALES`.
+
+These are the intentionally supported abstract operations, not a drop-in implementation of every native Date, Temporal, date-fns, Java, Python or .NET API. Calendar **year** operations require a formally defined Buddhist lunisolar year model, which is not yet implemented.
 
 Other exports: fullMoonInterval, eraLabel, moonAt, angularSeparation, DAYS_PER_MONTH, WEEKS_PER_MONTH, SECONDS_PER_MONTH.
 
