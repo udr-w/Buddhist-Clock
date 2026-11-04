@@ -1,2 +1,0 @@
-# Agents and maintainers
-Keep this project public and MIT licensed. Never imply virtual seconds provide CPU cycles or change physical SI time. Preserve the opt-in mapper design and official-calendar disclaimers. Do not mutate operating system clocks or patch JavaScript Date/Temporal. Add regression tests for boundary and reverse conversions. Protect geolocation by default. Run npm test and npm run build before a PR. Prioritize simple, reusable source and truthful science.

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1827">
+<meta name="description" content="A minimal lunar clock SDK demo with date picker, calendar, reports, and UTC interoperability.">
+<title>Lunar Planner · Buddhist Clock SDK Example</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./style.css">
+<script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<div class="shell">
+<header class="header">
+ <a href="../../" class="brand">◐ <span>BUDDHIST <b>CLOCK</b></span></a>
+ <div class="headerlinks"><span class="tag">SDK EXAMPLE 01</span><a href="https://github.com/udr-w/Buddhist-Clock/tree/main/web/demo" target="_blank" rel="noopener">Open-source code ↗</a></div>
+</header>
+<main>
+<section class="intro">
+ <div class="eyebrow">AN INTEROPERABILITY LAB · NO SERVER REQUIRED</div>
+ <h1>Lunar <em>Planner.</em></h1>
+ <p>Pick a 28-day lunar date, schedule a sample event, and watch it appear in a lunar calendar and report. The saved instant stays in ordinary UTC; only the presentation and calendar arithmetic change.</p>
+ <div class="controls">
+  <label>Calendar mode <select id="mode"><option value="phase">Phase-tracking seconds</option><option value="linear">Evenly stretched seconds</option></select></label>
+  <label>Language <select id="locale"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="ar">العربية</option><option value="zh">中文</option></select></label>
+ </div>
+</section>
+<section class="livebar" aria-label="Live lunar clock">
+ <div><div class="eyebrow">LIVE NOW</div><strong id="nowTime">··:··:··</strong><small id="nowDay">Calculating current lunar date</small></div>
+ <div><div class="eyebrow">UTC REFERENCE</div><strong id="utcNow" class="clockutc">···</strong><small>OS/UTC remains authoritative</small></div>
+ <button id="jumpToday" type="button" class="secondary">Go to current cycle ↗</button>
+</section>
+<div class="main-grid">
+ <section class="card" aria-labelledby="calendarTitle">
+   <div class="card-head"><div><div class="eyebrow">01 / CALENDAR</div><h2 id="calendarTitle">Four weeks, every cycle</h2></div>
+    <div class="navbuttons"><button id="previous" aria-label="Previous lunar month" type="button">←</button><button id="next" aria-label="Next lunar month" type="button">→</button></div>
+   </div>
+   <p id="cycleLabel" class="cycleLabel">Lunation ···</p>
+   <div class="weeklabels" id="weekLabels" aria-hidden="true"></div>
+   <div id="calendar" class="calendar" role="group" aria-label="Pick a lunar day"></div>
+   <p class="fine">Each row represents one lunar week, not a Gregorian week. Circular dots indicate event dates.</p>
+ </section>
+ <section class="card" aria-labelledby="pickerTitle">
+  <div class="eyebrow">02 / DATE + TIME PICKER</div><h2 id="pickerTitle">Choose a lunar instant</h2>
+  <p>Pick a day on the calendar and enter the time in virtual hours, minutes, and seconds.</p>
+  <div class="selection" id="selectedLabel">Day ·· · Week ·</div>
+  <form id="eventForm">
+   <div class="timeinputs">
+    <label>Hour <input id="hour" aria-label="Virtual lunar hour" type="number" min="0" max="23" step="1" value="12" required></label>
+    <label>Minute <input id="minute" aria-label="Virtual lunar minute" type="number" min="0" max="59" step="1" value="0" required></label>
+    <label>Second <input id="second" aria-label="Virtual lunar second" type="number" min="0" max="59" step="1" value="0" required></label>
+   </div>
+   <label class="eventlabel">Event title <input id="title" type="text" maxlength="80" placeholder="E.g. Lunar design review" required></label>
+   <button class="primary" type="submit">+ Add event</button>
+  </form>
+  <div class="conversion"><div class="eyebrow">THE REAL UTC INSTANT</div><code id="converted">···</code><small>This is what the application stores. Reversible to lunar time with the cycle ID and mode.</small></div>
+  <p class="notice" id="message" role="status">Event records stay in this browser session. No server or account.</p>
+ </section>
+</div>
+<section class="card report" aria-labelledby="reportTitle">
+ <div class="reportHead"><div><div class="eyebrow">03 / LUNAR REPORT</div><h2 id="reportTitle">Reports on a different calendar</h2><p>Ordinary UTC event records, aggregated into 28 lunar days and four lunar weeks.</p></div><button id="download" class="secondary" type="button">Download CSV ↓</button></div>
+ <div class="kpis"><div><span>Events this cycle</span><strong id="total">0</strong></div><div><span>Active lunar days</span><strong id="active">0</strong></div><div><span>Selected day events</span><strong id="selectedCount">0</strong></div></div>
+ <div class="reportgrid">
+  <div><h3>Events by lunar week</h3><div id="chart" class="chart" role="img" aria-label="Event counts by lunar week"></div></div>
+  <div><h3>Events in this cycle</h3><div class="tablewrap"><table><thead><tr><th>Event</th><th>Lunar day</th><th>Underlying UTC</th></tr></thead><tbody id="events"></tbody></table></div></div>
+ </div>
+</section>
+<section class="architecture">
+ <div><div class="eyebrow">04 / HOW APPLICATIONS USE IT</div><h2>New time coordinate. Same reliable foundations.</h2><p>The SDK supplies the date arithmetic, conversion, formatting, 28-day calendar model, and reporting model. Your app supplies whatever UI framework it prefers.</p></div>
+ <pre><code>import {
+  now, calendarGrid, fromLunar,
+  add, startOf, difference, report
+} from './buddhist-calendar.mjs';
+
+const today = now({ mode: 'phase' });
+const grid = calendarGrid(Date.now());
+const utc = fromLunar({
+  cycleId: today.cycleId,
+  day: 7, hour: 12
+});
+const nextWeek = add(utc, 1, 'week');
+const monthStart = startOf(utc, 'month');</code></pre>
+</section>
+<footer><a href="../../">← Back to the main clock</a> · <a href="https://github.com/udr-w/Buddhist-Clock">GitHub</a> · MIT Open Source <span>Demo records are illustrative, not religious observances.</span></footer>
+</main></div>
+</body></html>
