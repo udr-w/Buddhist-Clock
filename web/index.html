@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1322">
+<meta name="description" content="An open-source lunar clock: 28 virtual days, four 7-day weeks, one real full-moon cycle.">
+<title>Buddhist Clock · Time through the Moon</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./style.css"><script type="module" src="./app.mjs"></script>
+</head>
+<body><div class="frame">
+<header class="topbar">
+<a class="logo" href="./"><span class="mark">◐</span> BUDDHIST <b>CLOCK</b></a>
+<nav><a href="#clock">Clock</a><a href="#developers">For developers</a><a href="#science">Science</a><a href="https://github.com/udr-w/Buddhist-Clock" rel="noopener" target="_blank">Source ↗</a></nav>
+</header>
+<main>
+<section class="hero">
+<div class="eyebrow">OPEN SOURCE · AN EXPERIMENT IN LUNAR TIME</div>
+<h1>What if software could see <em>another kind of time?</em></h1>
+<p>Keep the CPU clock. Keep the OS clock. Add an entirely new coordinate above them: <strong>28 virtual days, four 7-day weeks, one cycle between full moons.</strong> Time mapped to the sky, without rewriting physics.</p>
+<div class="actions"><a class="primary" href="#clock">Explore the clock ↓</a><a class="secondary" href="https://github.com/udr-w/Buddhist-Clock" rel="noopener" target="_blank">Clone on GitHub ↗</a></div>
+</section>
+<section class="instrument" id="clock">
+<div class="sectiontop"><div><div class="eyebrow">01 / THE INSTRUMENT</div><h2>Twenty-eight days. One lunar cycle.</h2></div>
+<div class="switch" role="group" aria-label="Lunar time mapping method"><button type="button" data-mode="phase" aria-pressed="true" class="on">Phase-tracking</button><button type="button" data-mode="linear" aria-pressed="false">Evenly stretched</button></div></div>
+<div class="clockgrid">
+<div class="dialwrap"><svg viewBox="0 0 500 500" role="img" aria-label="Circular twenty-eight day lunar clock">
+<defs><linearGradient id="beam"><stop stop-color="#ffe8b4"/><stop offset="1" stop-color="#b99757"/></linearGradient></defs>
+<circle cx="250" cy="250" r="228" stroke="#34445a" stroke-width="1" fill="none"/>
+<circle cx="250" cy="250" r="178" stroke="#253648" stroke-width="7" fill="none"/>
+<circle id="arc" cx="250" cy="250" r="178" stroke="url(#beam)" stroke-width="7" fill="none" transform="rotate(-90 250 250)" stroke-linecap="round"/>
+<g id="ticks"></g><g id="hand"><line x1="250" y1="250" x2="250" y2="96" stroke="#f2d8a4" stroke-width="2"/><circle cx="250" cy="96" r="6" fill="#f2d8a4"/></g>
+<circle cx="250" cy="250" r="136" fill="#0b1625" stroke="#394b61" stroke-width="1.3"/><circle cx="250" cy="250" r="4" fill="#f2d8a4"/>
+</svg><div class="dialmiddle"><div class="subtle">LUNAR DAY</div><div class="daynum"><span id="day">··</span><small>/ 28</small></div><div class="digits" id="time">--:--:--</div><div class="subtle">VIRTUAL HOURS : MINUTES : SECONDS</div></div></div>
+<div class="readout"><div class="eyebrow">LIVE / ASTRONOMICAL TIME</div><div class="era" id="era">BE ····</div><div class="week" id="week">WEEK · OF 4</div>
+<p id="modehelp">Phase-tracking seconds expand and contract with the Moon–Sun angle.</p>
+<div class="line"><span>Last full moon</span><b id="from">···</b></div>
+<div class="line"><span>Next full moon</span><b id="until">···</b></div>
+<div class="line"><span>Length of this lunar second</span><b id="sec">···</b></div>
+<div class="line"><span>Moon illumination</span><b id="lit">···</b></div>
+<div class="line"><span>Underlying UTC</span><b id="utc">···</b></div>
+<div class="status" id="status" role="status">Initializing…</div>
+</div></div></section>
+<section class="location"><div><div class="eyebrow">02 / YOUR HORIZON</div><h2>One lunar date. Different skies.</h2><p>A full moon is a worldwide astronomical instant. Your location changes where you see the Moon, not the time this clock displays.</p></div>
+<div class="localbox"><form id="coords"><label>LATITUDE <input id="lat" type="number" step="any" min="-90" max="90" value="6.9271" required></label><label>LONGITUDE <input id="lon" type="number" step="any" min="-180" max="180" value="79.8612" required></label><button class="primary" type="submit">Set location</button></form>
+<button class="secondary" id="geolocate" type="button">⌖ Use my location</button>
+<div class="sky"><span id="az">AZ ···°</span><span id="alt">ALT ···°</span><span id="above">···</span></div><p class="caption">Location permission is optional. Coordinates stay in your browser.</p></div>
+</section>
+<section class="developers" id="developers"><div class="eyebrow">03 / BUILD ON TOP</div>
+<h2>Offer software another time coordinate.</h2><p>Your users want faster outcomes. Some processes need longer planning horizons. An astronomical calendar can describe those horizons, while real deadlines and processing time remain governed by SI seconds and the OS clock.</p>
+<div class="devgrid"><div><h3>Import the mapper</h3><pre>import { mapInstant } from './buddhist-clock.mjs';
+const lunar = mapInstant(Date.now(), {
+  mode: 'phase'
+});
+console.log(lunar.week, lunar.day);</pre></div>
+<div><h3>Live output</h3><pre id="json">Calculating…</pre></div></div>
+<div class="four"><div><b>28</b><span>virtual days</span></div><div><b>4</b><span>lunar weeks</span></div><div><b>7</b><span>days per week</span></div><div><b>0</b><span>OS clock modifications</span></div></div>
+</section>
+<section class="science" id="science"><div class="eyebrow">04 / THE MODEL</div><h2>A new coordinate, not a new physical second.</h2>
+<p>An average full-moon cycle lasts approximately 29.53 conventional days. Normalizing it into 28 days makes a virtual second longer than an SI second. Phase-tracking seconds change duration as the astronomical lunar phase advances.</p>
+<p>The Moon is Earth's nearest major celestial neighbor and contributes to tides. But the Moon is not a “solar component,” and its gravity is not what causes the mapped second to lengthen. This is a deliberately designed calendar.</p>
+<p>This clock is <strong>inspired by Buddhist lunar ideas</strong>, not an official Buddhist lunisolar calendar or Sri Lankan Poya calendar. The 2026 State Vesak Buddhist Era transition is curated; other years are provisional. Keep UTC/monotonic clocks for real-time expiry, scheduling, financial transactions and security.</p>
+<p>Learn more from <a href="https://science.nasa.gov/moon/moon-phases/" rel="noopener" target="_blank">NASA lunar phases</a> and <a href="https://github.com/cosinekitty/astronomy" rel="noopener" target="_blank">Astronomy Engine</a>.</p>
+</section></main>
+<footer><a class="logo" href="./"><span class="mark">◐</span> BUDDHIST <b>CLOCK</b></a><p>Open-source MIT software · Astronomy Engine (MIT) · <a href="https://github.com/udr-w/Buddhist-Clock">Explore the source ↗</a></p></footer>
+</div></body></html>
