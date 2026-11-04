@@ -21,7 +21,7 @@ test('renders ornamented hour, minute and second hands on every clock face',asyn
     await expect(page.locator('#dayLabel')).toHaveText(label);
     await expect(page.locator('#time')).toHaveText(/^\d\d:\d\d:\d\d$/);
   }
-  await expect(page.locator('#modehelp')).toContainText('standard');
+  await expect(page.locator('#modehelp')).toContainText('SI second');
 });
 
 test('swipe left and right on clock to flip through all three modes',async({page})=>{
